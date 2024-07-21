@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "162247269168",
+    "project_id": "speedy-anthem-414414",
+    "storage_bucket": "speedy-anthem-414414.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162247269168:android:937c91d7a3f6bb0c06c6f5",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG19lCKzm5hsRF19RWBz1eH4PUP8hrxsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162247269168:android:f22903e7a1cc69bb06c6f5",
+        "android_client_info": {
+          "package_name": "com.example.firebase_series"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG19lCKzm5hsRF19RWBz1eH4PUP8hrxsA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
