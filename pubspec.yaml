@@ -41,6 +41,8 @@ dependencies:
   emoji_picker_flutter: ^1.0.0
   cloud_firestore: ^5.1.0
   intl: ^0.19.0
+  firebase_storage: ^12.1.1
+  file_picker: ^8.0.6
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +77,7 @@ flutter:
     - assets/images/ronaldo.jpg
     - assets/images/kate_winslet.jpg
     - assets/images/rocky.jpg
+    - assets/images/google_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

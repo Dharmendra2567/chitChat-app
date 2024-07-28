@@ -87,9 +87,10 @@ class UiHelper {
   static customMessageBox(String message,String time){
       return RichText(
         text: TextSpan(
-          style: const TextStyle( fontSize: 15),
+          style: const TextStyle( fontSize: 15,color: Colors.black),
           children: [
             TextSpan(
+
               text: message,
               style: const TextStyle(fontWeight: FontWeight.normal),
             ),
@@ -99,7 +100,7 @@ class UiHelper {
                 offset: const Offset(4, 3),
                 child: Text(
                   time,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                  style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 10),
                 ),
               ),
             ),

@@ -6,6 +6,7 @@ class Message {
   final String receiverId;
   final String senderEmail;
   final String messages;
+  final String? fileUrl ;
   final Timestamp timestamps;
 
   Message({
@@ -14,6 +15,7 @@ class Message {
     required this.receiverId,
     required this.senderEmail,
     required this.messages,
+    this.fileUrl,
     required this.timestamps,
   });
 
@@ -24,6 +26,7 @@ class Message {
       'receiverId': receiverId,
       'receiverEmail': receiverEmail,
       'messages': messages,
+      'fileUrl':fileUrl,
       'Timestamps': timestamps,
     };
   }

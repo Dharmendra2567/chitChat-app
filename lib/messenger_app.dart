@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login_page.dart';
-import 'user_profile.dart';
+import 'profile.dart';
 import 'chat_screen.dart';
 import 'chat_item.dart';
 
@@ -34,7 +34,7 @@ class _MessengerAppState extends State<MessengerApp> {
       case 'Profile':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const UserProfile()),
+          MaterialPageRoute(builder: (context) => const Profile()),
         );
         break;
       case 'Logout':

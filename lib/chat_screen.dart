@@ -1,5 +1,7 @@
 import 'package:chat_app/Uihelper.dart';
+import 'package:chat_app/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -44,24 +46,26 @@ class _ChatScreensState extends State<ChatScreens> {
   }
 
   void _sendMessage() async {
-    if (_messageController.text.isNotEmpty) {
+    if (_messageController.text.isNotEmpty || _image != null) {
+      String? fileUrl;
+      if(_image != null){
+        fileUrl = await chatServices.uploadFile(_image!,'${widget.senderId}_${widget.receiverId}');
+        print('image url: $fileUrl');
+      }
       await chatServices.sendMessage(
         widget.receiverId,
         _messageController.text,
         widget.receiverEmail,
+          fileUrl: fileUrl
       );
       _messageController.clear();
-    }
-
-    if (_image != null) {
-      // Add logic to upload and send image message
       setState(() {
         _image = null;
       });
     }
   }
 
-  Widget _buildChatBubble(String message,String time, bool isSentByMe) {
+  Widget _buildChatBubble(String message,String time, String? fileUrl, bool isSentByMe) {
     return Align(
       alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -71,31 +75,58 @@ class _ChatScreensState extends State<ChatScreens> {
           color: isSentByMe ? Colors.lightGreen[100] : Colors.grey[200],
           borderRadius: BorderRadius.circular(10),
         ),
-        child: UiHelper.customMessageBox(message, time),
-      ),
-    );
-  }
+        child: Column(
+          children: [
+            if(message.isNotEmpty)
+              UiHelper.customMessageBox(message, time),
+            if(fileUrl != null)
+            SizedBox(
+              height: 260,
+              width: 150,
+              child: Image.network(fileUrl!),
+            )
 
-  Widget _buildChatBubbleWithImage(File image, bool isSentByMe) {
-    return Align(
-      alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        decoration: BoxDecoration(
-          color: isSentByMe ? Colors.lightGreen[100] : Colors.grey[200],
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Image.file(
-          image,
-          width: 150,
-          height: 150,
-          fit: BoxFit.cover,
+          ],
         ),
       ),
     );
   }
 
+
+
+  Future<void> _pickDocument() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.any,
+        allowMultiple: false,
+      );
+      if (result != null && result.files.single.path != null) {
+        File file = File(result.files.single.path!);
+        print('Document selected: ${file.path}');
+        // Handle the selected document file, e.g., upload to Firebase
+        await chatServices.uploadFile(file, 'document_${DateTime.now().millisecondsSinceEpoch}');
+      }
+    } catch (e) {
+      print('Error picking document: $e');
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      File file = File(image.path);
+      // Handle the selected image file
+
+    }
+  }
+
+void _navigateToProfile(){
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const UserProfile()),
+  );
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,18 +148,21 @@ class _ChatScreensState extends State<ChatScreens> {
           ),
         ),
         titleSpacing: -7,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.username,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            const Text(
-              'Last seen today at 5:00 pm',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-            ),
-          ],
+        title: GestureDetector(
+          onTap: _navigateToProfile,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.username,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+              const Text(
+                'Last seen today at 5:00 pm',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+            ],
+          ),
         ),
         actions: [
           IconButton(
@@ -167,13 +201,14 @@ class _ChatScreensState extends State<ChatScreens> {
                     DocumentSnapshot messageDoc = docs[index];
                     Map<String, dynamic> messageData = messageDoc.data() as Map<String, dynamic>;
                     String message = messageData['messages'] ?? '';
+                    String? fileUrl = messageData['fileUrl'];
                     Timestamp timestamp = messageData['Timestamps'];
                     DateTime dateTime = timestamp.toDate();
-                    String time = DateFormat('h:mm a').format(dateTime);
+                    String? time = DateFormat('h:mm a').format(dateTime);
                     bool isSentByCurrentUser = messageData['senderId'] == widget.senderId;
 
                     print("Message: $message, Sent by me: $isSentByCurrentUser");
-                    return _buildChatBubble(message,time, isSentByCurrentUser);
+                    return _buildChatBubble(message,time,fileUrl, isSentByCurrentUser);
                   },
                 );
               },
@@ -233,11 +268,79 @@ class _ChatScreensState extends State<ChatScreens> {
                                 ),
                               ),
                             ),
-                            const Icon(Icons.attach_file, color: Colors.grey),
-                            const SizedBox(width: 8.0),
+                            IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Choose'),
+                                          IconButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            icon: Icon(Icons.close_outlined),
+                                          ),
+                                        ],
+                                      ),
+
+                                   actions: [
+                                     Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                       children: [
+                                         GestureDetector(
+                                           onTap:  _pickDocument,
+
+                                           child: Container(
+                                             padding: EdgeInsets.all(5),
+                                             decoration: BoxDecoration(
+                                               color: Colors.grey[350],
+                                               borderRadius: BorderRadius.circular(11),
+                                             ),
+                                             child: const Column(
+                                               children: [
+                                                 Icon(Icons.insert_drive_file, size: 35),
+                                                 Text('Document'),
+                                               ],
+                                             ),
+                                           ),
+                                         ),
+                                         SizedBox(height: 20),
+                                         GestureDetector(
+                                           onTap: () async {
+                                             Navigator.pop(context); // Close the dialog
+                                             await _pickImage();
+                                           },
+                                           child: Container(
+                                             padding: EdgeInsets.all(5),
+                                             decoration: BoxDecoration(
+                                               color: Colors.grey[350],
+                                               borderRadius: BorderRadius.circular(11),
+                                             ),
+                                             child: const Column(
+                                               children: [
+                                                 Icon(Icons.photo_library, size: 35),
+                                                 Text('Gallery'),
+                                               ],
+                                             ),
+                                           ),
+                                         ),
+                                       ],
+                                     )
+                                   ],
+                                    );
+                                  },
+                                );
+                              },
+                              icon: Icon(Icons.attach_file, color: Colors.grey[700]),
+                            ),
+                             SizedBox(width: 8.0),
                             GestureDetector(
                               onTap: _openCamera,
-                              child: const Icon(Icons.camera_alt, color: Colors.grey),
+                              child: const Icon(Icons.camera_alt, color: Colors.grey,),
                             ),
                           ],
                         ),
@@ -245,7 +348,7 @@ class _ChatScreensState extends State<ChatScreens> {
                     ),
                     const SizedBox(width: 8.0),
                     CircleAvatar(
-                      backgroundColor: Colors.lightGreen[100],
+                      backgroundColor: Colors.lightGreen[600],
                       child: IconButton(
                         icon: const Icon(Icons.send, color: Colors.white),
                         onPressed: _sendMessage,

@@ -117,6 +117,37 @@ class _RegisterPageState extends State<RegisterPage> {
                 _passwordController.text.toString(),
                 _confirmPassController.text.toString());
           }, 'Register'),
+          const SizedBox(height: 20),
+          const Text('or'),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () {
+              // Implement Google Sign-In logic here
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric( horizontal: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.black),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/google_icon.png', // Add the Google icon image to your assets
+                    height: 50,
+                    width: 60,
+                  ),
+                  const SizedBox(width: 5),
+                  const Text(
+                    'Sign in with Google',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
