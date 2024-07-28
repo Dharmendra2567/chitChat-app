@@ -29,16 +29,16 @@ Welcome to **ChitChat Messenger**, your ultimate chat application for seamless c
 
 ## Screenshots
 
-![Login Screen](assets/screenshots/login.png)
+![Login Screen](assets/screenshots/login_page.jpg)
 *Login Screen: Secure login with email or Google account.*
 
-![Register Screen](assets/screenshots/register.png)
+![Register Screen](assets/screenshots/register_page.jpg)
 *Register Screen: Create a new account with ease.*
 
-![Chat Screen](assets/screenshots/chat.png)
+![Chat Screen](assets/screenshots/image1.jpg)
 *Chat Screen: Real-time messaging with friends.*
 
-![Profile Screen](assets/screenshots/profile.png)
+![Profile Screen](assets/screenshots/logged_profile.jpg)
 *Profile Screen: View and update your profile details.*
 
 ## Getting Started
