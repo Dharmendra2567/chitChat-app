@@ -28,18 +28,18 @@ Welcome to **ChitChat Messenger**, your ultimate chat application for seamless c
 - **Responsive Design**: Optimized for both mobile and tablet screens.
 
 ## Screenshots
-
-![Login Screen](assets/screenshots/login_page.jpg)
+<img src="assets/screenshots/login_page.jpg" alt="Login Screen" width="180" height="400">
 *Login Screen: Secure login with email or Google account.*
 
-![Register Screen](assets/screenshots/register_page.jpg)
+<img src="assets/screenshots/register_page.jpg" alt="Register Screen" width="180" height="400">
 *Register Screen: Create a new account with ease.*
 
-![Chat Screen](assets/screenshots/image1.jpg)
+<img src="assets/screenshots/image1.jpg" alt="Chat Screen" width="180" height="400">
 *Chat Screen: Real-time messaging with friends.*
 
-![Profile Screen](assets/screenshots/logged_profile.jpg)
+<img src="assets/screenshots/logger_user_profile.jpg" alt="Profile Screen" width="180" height="400">
 *Profile Screen: View and update your profile details.*
+
 
 ## Getting Started
 
