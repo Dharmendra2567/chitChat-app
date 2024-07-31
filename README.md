@@ -52,4 +52,8 @@ Welcome to **ChitChat Messenger**, your ultimate chat application for seamless c
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/yourusername/chitchat-messenger.git
+<<<<<<< HEAD
    cd chitchat-messenger
+=======
+   cd chitchat-messenger
+>>>>>>> 0b86b8c (readme.mg updated)
