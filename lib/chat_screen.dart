@@ -292,8 +292,10 @@ void _navigateToProfile(){
                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                        children: [
                                          GestureDetector(
-                                           onTap:  _pickDocument,
-
+                                           onTap: () async {
+                                             Navigator.pop(context); // Close the dialog
+                                             await _pickDocument();
+                                           },
                                            child: Container(
                                              padding: EdgeInsets.all(5),
                                              decoration: BoxDecoration(
